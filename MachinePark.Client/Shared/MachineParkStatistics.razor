@@ -31,6 +31,6 @@
         var devices = await DevicesClient.GetAsync();
         DevicesCount = devices.Count();
         OnlineDevicesCount = devices.Count(d => d.IsOnline == true);
-        LastEditedMachineName = devices.OrderBy(d => d.LastUpdated).LastOrDefault().Name;
+        LastEditedMachineName = devices.Count() > 0 ? devices.OrderBy(d => d.LastUpdated).LastOrDefault().Name : "None";
     }
 }

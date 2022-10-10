@@ -14,7 +14,8 @@ namespace MachinePark.Services
 
         public async Task<IEnumerable<Device>> GetAsync()
         {
-            return await httpClient.GetFromJsonAsync<IEnumerable<Device>>("api/GetDevices");
+            var result = await httpClient.GetFromJsonAsync<IEnumerable<Device>>("api/GetDevices");
+            return result;
         }
 
         public async Task<Device?> PostAsync(CreateDevice createDevice)
