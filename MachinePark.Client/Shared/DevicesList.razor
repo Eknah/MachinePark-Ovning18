@@ -1,0 +1,82 @@
+﻿@using MachinePark.Shared
+
+<div class="bg-white shadow-sm p-3">
+    <h5>Devices</h5>
+<button class="btn btn-primary" @onclick="AddNewDevice">New Device</button>
+
+    <div class="container-fluid">
+        <div class="row fw-bold">
+            <div class="col-3">
+                Device Id
+            </div>
+            <div class="col-sm">
+                Name
+            </div>
+            <div class="col-sm">
+                Location
+            </div>
+            <div class="col-sm">
+                Date
+            </div>
+            <div class="col-sm">
+                Type
+            </div>
+            <div class="col-sm">
+                Status
+            </div>
+        </div>
+
+        @foreach (var device in DeviceItems)
+        {
+
+            <div class="row">
+                <div class="col-3"><span class="forceWrap">@device.Id</span></div>
+                <div class="col-sm">@device.Name</div>
+                <div class="col-sm">@device.Location.Name<br />@device.Location.Country</div>
+                <div class="col-sm">@device.LastUpdated.ToString("dd/MM/yyyy")</div>
+                <div class="col-sm">@device.Type.Name<br />@device.Type.Description</div>
+                <div class="col-sm">
+                    @if (device.IsOnline) {
+
+                        <span class="text-success">Online</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Offline</span>
+                    }
+                    </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public IEnumerable<Device> DeviceItems { get; set; } = new List<Device>();
+
+    //private void ItemCompleted(Item item)
+    //{
+    //    item.Completed = item.Completed ? false : true;
+
+    //    //ToDo call api
+    //    //Act on success
+    //}
+
+    //private void Remove(Item item)
+    //{
+
+    //    //ToDo call api
+    //    ToDoItems.Remove(item);
+    //}
+
+    private void AddNewDevice()
+    {
+
+    }
+
+}
