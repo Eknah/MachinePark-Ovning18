@@ -29,43 +29,6 @@ namespace MachinePark.Server
 
         private static DeviceType type = new() { Name = "Weather Sensor", Description = "temperature, humidity" };
 
-        //private static List<Device> devices = new List<Device>()
-        //{
-            //new Device()
-            //    {
-            //        Name = "Maskin A",
-            //        Location = location,
-            //        LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
-            //        Type = type,
-            //        IsOnline = Random.Shared.Next(2) == 0 ? true : false
-            //    },
-            //    new Device()
-            //    {
-            //        Name = "Maskin B",
-            //        Location = location,
-            //        LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
-            //        Type = type,
-            //        IsOnline = Random.Shared.Next(2) == 0 ? true : false
-            //    },
-            //    new Device()
-            //    {
-            //        Name = "Maskin C",
-            //        Location = location,
-            //        LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
-            //        Type = type,
-            //        IsOnline = Random.Shared.Next(2) == 0 ? true : false
-            //    },
-            //    new Device()
-            //    {
-            //        Name = "Maskin D",
-            //        Location = location,
-            //        LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
-            //        Type = type,
-            //        IsOnline = Random.Shared.Next(2) == 0 ? true : false
-            //    }
-        //};
-
-
         [FunctionName("GetDevices")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -80,38 +43,16 @@ namespace MachinePark.Server
             var response = result.Select(Mapper.ToItem).ToList();
 
             return new OkObjectResult(response);
-
-            //return new OkObjectResult(devices);
         }
 
 
         [FunctionName("CreateDevice")]
         public static async Task<IActionResult> Create(
-            //[HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "todo")] HttpRequest req,
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             [Table("devices", Connection = "AzureWebJobsStorage")] CloudTable deviceTable, // IAsyncCollector<ItemTableEntity> itemTable,
             ILogger log)
         {
             log.LogInformation("Create item");
-
-
-            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //var createDevice = JsonConvert.DeserializeObject<CreateDevice>(requestBody);
-
-            //if (createDevice == null || string.IsNullOrWhiteSpace(createDevice.Name)) return new BadRequestResult();
-
-            //var device = new Device
-            //{
-            //    Name = createDevice.Name,
-            //    Location = location,
-            //    Type = type,
-            //    LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
-            //    IsOnline = false
-            //};
-
-            //return new OkObjectResult(null);
-
-
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var createDevice = JsonConvert.DeserializeObject<CreateDevice>(requestBody);
@@ -134,7 +75,6 @@ namespace MachinePark.Server
 
             return new OkObjectResult(device);
         }
-
 
 
 
