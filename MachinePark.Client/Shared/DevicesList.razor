@@ -1,4 +1,5 @@
-﻿@using MachinePark.Shared
+﻿@using MachinePark.Services
+@using MachinePark.Shared
 
 <div class="bg-white shadow-sm p-3">
     <h5>Devices</h5>
@@ -6,7 +7,7 @@
     <hr />
 @if (addDeviceVisible)
     {
-        <AddDevice />
+        <AddDevice Add="AddDevice" />
     }
 
     <div class="container-fluid">
@@ -64,6 +65,10 @@
 
 @code {
 
+
+    [Inject]
+    public IDevicesClient DevicesClient { get; set; } = default!;
+
     [Parameter]
     public IEnumerable<Device> DeviceItems { get; set; } = new List<Device>();
 
@@ -87,6 +92,19 @@
     private void AddNewDevice()
     {
         addDeviceVisible = !addDeviceVisible;
+    }
+
+    private async Task AddDevice(CreateDevice createDevice)
+    {
+        // var newItem = new CreateItem { Text = text };
+
+        var createdItem = await DevicesClient.PostAsync(createDevice);
+
+        if (createdItem != null)
+            DeviceItems = DeviceItems.ToList().Append(createdItem);
+
+        //if (createdItem != null)
+        //    DeviceItems.Add(createdItem);
     }
 
 }
