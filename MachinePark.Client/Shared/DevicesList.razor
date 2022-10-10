@@ -3,6 +3,11 @@
 <div class="bg-white shadow-sm p-3">
     <h5>Devices</h5>
 <button class="btn btn-primary" @onclick="AddNewDevice">New Device</button>
+    <hr />
+@if (addDeviceVisible)
+    {
+        <AddDevice />
+    }
 
     <div class="container-fluid">
         <div class="row fw-bold">
@@ -35,7 +40,7 @@
                 <div class="col-3"><span class="forceWrap">@device.Id</span></div>
                 <div class="col-sm">@device.Name</div>
                 <div class="col-sm">@device.Location.Name<br />@device.Location.Country</div>
-                <div class="col-sm">@device.LastUpdated.ToString("dd/MM/yyyy")</div>
+                <div class="col-sm">@device.LastUpdated.ToString("dd/MM/yyyy")<br />last updated</div>
                 <div class="col-sm">@device.Type.Name<br />@device.Type.Description</div>
                 <div class="col-sm">
                     @if (device.IsOnline) {
@@ -77,9 +82,11 @@
     //    ToDoItems.Remove(item);
     //}
 
+    private bool addDeviceVisible = false;
+
     private void AddNewDevice()
     {
-
+        addDeviceVisible = !addDeviceVisible;
     }
 
 }
