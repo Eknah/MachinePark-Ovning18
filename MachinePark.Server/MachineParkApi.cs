@@ -25,9 +25,6 @@ namespace MachinePark.Server
 {
     public static class MachineParkAPI
     {
-        private static Location location = new() { Name = "Vega", Country = "Sweden" };
-
-        private static DeviceType type = new() { Name = "Weather Sensor", Description = "temperature, humidity" };
 
         [FunctionName("GetDevices")]
         public static async Task<IActionResult> Run(
@@ -54,6 +51,9 @@ namespace MachinePark.Server
         {
             log.LogInformation("Create item");
 
+            Location defaultLocation = new() { Name = "Vega", Country = "Sweden" };
+            DeviceType defaultType = new() { Name = "Weather Sensor", Description = "temperature, humidity" };
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var createDevice = JsonConvert.DeserializeObject<CreateDevice>(requestBody);
 
@@ -62,8 +62,8 @@ namespace MachinePark.Server
             var device = new Device
             {
                 Name = createDevice.Name,
-                Location = location,
-                Type = type,
+                Location = defaultLocation,
+                Type = defaultType,
                 LastUpdated = DateTime.Now.AddDays(Random.Shared.Next(20)).Date,
                 IsOnline = false
             };
@@ -78,23 +78,23 @@ namespace MachinePark.Server
 
 
 
-        //[FunctionName("DeleteDevice")]
-        //public static async Task<IActionResult> Delete(
-        //    //[HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todo/{id}")] HttpRequest req,
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "DeleteDevice/{id}")] HttpRequest req,
-        //    //[Table("items", "Todo", "{id}", Connection = "AzureWebJobsStorage")] ItemTableEntity itemTableToDelete,
-        //    //[Table("items", Connection = "AzureWebJobsStorage")] CloudTable itemTable,
-        //    ILogger log, string id)
-        //{
-        //    log.LogInformation("Delete item");
+        [FunctionName("DeleteDevice")]
+        public static async Task<IActionResult> Delete(
+            //[HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "todo/{id}")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "DeleteDevice/{id}")] HttpRequest req,
+            [Table("devices", "Device", "{id}", Connection = "AzureWebJobsStorage")] DeviceTableEntity deviceTableToDelete,
+            [Table("devices", Connection = "AzureWebJobsStorage")] CloudTable deviceTable,
+            ILogger log, string id)
+        {
+            log.LogInformation("Delete item");
 
 
-        //    //if (itemTableToDelete == null || string.IsNullOrWhiteSpace(itemTableToDelete.Text)) return new BadRequestResult();
+            if (deviceTableToDelete == null || string.IsNullOrWhiteSpace(deviceTableToDelete.Name)) return new BadRequestResult();
 
-        //    //var operation = TableOperation.Delete(itemTableToDelete);
-        //    //await itemTable.ExecuteAsync(operation);
-        //    return new NoContentResult();
-        //}
+            var operation = TableOperation.Delete(deviceTableToDelete);
+            await deviceTable.ExecuteAsync(operation);
+            return new NoContentResult();
+        }
 
 
     }

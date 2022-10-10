@@ -6,5 +6,6 @@ namespace MachinePark.Services
     {
         Task<IEnumerable<Device>> GetAsync();
         Task<Device?> PostAsync(CreateDevice createDevice);
+        Task<bool> RemoveAsync(string id);
     }
 }

@@ -27,5 +27,12 @@ namespace MachinePark.Services
 
             return null;
         }
+
+        public async Task<bool> RemoveAsync(string id)
+        {
+            var response = await httpClient.DeleteAsync($"api/DeleteDevice/{id}");
+
+            return response.IsSuccessStatusCode ? true : false;
+        }
     }
 }

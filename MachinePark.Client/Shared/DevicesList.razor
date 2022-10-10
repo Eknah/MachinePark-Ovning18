@@ -53,7 +53,7 @@
                         <span class="text-danger">Offline</span>
                     }
                 </div>
-                <div class="col-sm">[Start/Stop] [Update] [Send] [Read] <a href="#"><img src="icons/trash.svg" alt="Remove Device" /></a></div>
+                <div class="col-sm">[Start/Stop] [Update] [Send] [Read] <a href="#" @onclick="@(async e => await RemoveDevice(device.Id))" @onclick:preventDefault><img src="icons/trash.svg" alt="Remove Device" /></a></div>
 
             </div>
         }
@@ -103,6 +103,12 @@
         if (createdItem != null)
             DeviceItems = DeviceItems.ToList().Append(createdItem);
 
+    }
+
+    private async Task RemoveDevice(string id)
+    {
+        await DevicesClient.RemoveAsync(id);
+        DeviceItems = DeviceItems.Where(d => d.Id != id);
     }
 
 }
